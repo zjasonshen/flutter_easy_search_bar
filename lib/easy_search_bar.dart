@@ -145,7 +145,9 @@ class EasySearchBar<T> extends StatefulWidget implements PreferredSizeWidget {
   /// Can be uses to allow user to cancel suggestions with escape or back button.
   final bool cancelableSuggestions;
 
-  const EasySearchBar(
+  final bool Function() onPressBack;
+
+  const EasySearchBar(this.onPressBack,
       {Key? key,
       required this.title,
       required this.onSearch,
@@ -481,7 +483,7 @@ class _EasySearchBarState<T> extends State<EasySearchBar<T>>
                                                           child: Padding(
                                                             padding:
                                                                 const EdgeInsets
-                                                                        .only(
+                                                                    .only(
                                                                     right: 10),
                                                             child: IconButton(
                                                                 icon: const Icon(
@@ -500,7 +502,7 @@ class _EasySearchBarState<T> extends State<EasySearchBar<T>>
                                                             child: Padding(
                                                               padding:
                                                                   const EdgeInsets
-                                                                          .only(
+                                                                      .only(
                                                                       right:
                                                                           10),
                                                               child: IconButton(
@@ -523,7 +525,7 @@ class _EasySearchBarState<T> extends State<EasySearchBar<T>>
                                                             child: Padding(
                                                               padding:
                                                                   const EdgeInsets
-                                                                          .only(
+                                                                      .only(
                                                                       right:
                                                                           10),
                                                               child: widget
@@ -536,7 +538,7 @@ class _EasySearchBarState<T> extends State<EasySearchBar<T>>
                                                       child: Container(
                                                           margin:
                                                               const EdgeInsets
-                                                                      .only(
+                                                                  .only(
                                                                   left: 10),
                                                           child:
                                                               DefaultTextStyle(
@@ -667,12 +669,23 @@ class _EasySearchBarState<T> extends State<EasySearchBar<T>>
                                                                         child: IconButton(
                                                                             icon: const Icon(Icons.arrow_back_outlined),
                                                                             onPressed: () {
-                                                                              _controller.reverse();
-                                                                              _searchController.clear();
-                                                                              widget.onSearch(_searchController.text);
-                                                                              _focusNode.unfocus();
-                                                                              closeOverlay();
-                                                                            })),
+                                                                              if (!widget.onPressBack()) {
+                                                                                _controller.reverse();
+                                                                                _searchController.clear();
+                                                                                widget.onSearch(_searchController.text);
+                                                                                _focusNode.unfocus();
+                                                                                closeOverlay();
+                                                                              }
+                                                                            }
+                                                                            // widget.onPressBack,
+                                                                            //     () {
+                                                                            //   _controller.reverse();
+                                                                            //   _searchController.clear();
+                                                                            //   widget.onSearch(_searchController.text);
+                                                                            //   _focusNode.unfocus();
+                                                                            //   closeOverlay();
+                                                                            // },
+                                                                            )),
                                                                     suffixIcon: IconTheme(
                                                                         data: searchClearIconTheme,
                                                                         child: IconButton(
